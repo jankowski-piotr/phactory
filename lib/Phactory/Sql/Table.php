@@ -8,7 +8,7 @@ class Table {
     protected $_db_util;
     protected $_phactory;
 
-    public function __construct($singular_name, $pluralize = true, Phactory $phactory) {
+    public function __construct($singular_name, Phactory $phactory, $pluralize = true) {
         $this->_phactory = $phactory;
         $this->_db_util = DbUtilFactory::getDbUtil($phactory);
         $this->_singular = $singular_name;

@@ -30,8 +30,8 @@ class ManyToManyTest extends \PHPUnit_Framework_TestCase
 
     public function testGuessFromColumn()
     {
-        $assoc = new ManyToMany(new Table('image', true, $this->phactory), new Table('users_images', false, $this->phactory));
-        $assoc->setFromTable(new Table('user', true, $this->phactory));
+        $assoc = new ManyToMany(new Table('image', $this->phactory, true), new Table('users_images', $this->phactory, false));
+        $assoc->setFromTable(new Table('user', $this->phactory, true));
         $this->assertEquals('id', $assoc->getFromColumn());
         $this->assertEquals('user_id', $assoc->getFromJoinColumn());
         $this->assertEquals('image_id', $assoc->getToJoinColumn());

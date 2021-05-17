@@ -28,8 +28,8 @@ class ManyToOneTest extends \PHPUnit_Framework_TestCase
 
     public function testGuessFromColumn()
     {
-        $assoc = new ManyToOne(new Table('user', true, $this->phactory));
-        $assoc->setFromTable(new Table('post', true, $this->phactory));
+        $assoc = new ManyToOne(new Table('user', $this->phactory, true));
+        $assoc->setFromTable(new Table('post', $this->phactory, true));
         $this->assertEquals('user_id', $assoc->getFromColumn());
     }
 }

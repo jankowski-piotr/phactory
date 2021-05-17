@@ -10,7 +10,7 @@ class Row {
     public function __construct($table, $data, Phactory $phactory) {
         $this->_phactory = $phactory;
         if(!$table instanceof Table) {
-            $table = new Table($table, true, $phactory);
+            $table = new Table($table, $phactory, true);
         }
         $this->_table = $table;
         foreach($data as $key => $value) {
@@ -67,6 +67,7 @@ class Row {
 
                 $sql = substr($sql, 0, -4);
 
+                var_dump($sql, $params);
                 $stmt = $pdo->prepare($sql);
                 $stmt->execute($params);
                 $result = $stmt->fetch(\PDO::FETCH_ASSOC);

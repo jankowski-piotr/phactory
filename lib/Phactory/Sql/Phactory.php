@@ -98,7 +98,7 @@ class Phactory {
      * The row is saved to the database, and returned
      * as a Row.
      *
-     * @param string $blueprint_name name of the blueprint to use 
+     * @param string $blueprint_name name of the blueprint to use
      * @param array $associations [table name] => [Row]
      * @param array $overrides key => value pairs of column => value
      * @return object Row
@@ -107,7 +107,7 @@ class Phactory {
         if(! ($blueprint = $this->_blueprints[$blueprint_name]) ) {
             throw new \Exception("No blueprint defined for '$blueprint_name'");
         }
-            
+
         return $blueprint->create($overrides, $associations);
     }
 
@@ -116,7 +116,7 @@ class Phactory {
      * overriding some or all of the default values.
      * The row is not saved to the database.
      *
-     * @param string $blueprint_name name of the blueprint to use 
+     * @param string $blueprint_name name of the blueprint to use
      * @param array $associations [table name] => [Row]
      * @param array $overrides key => value pairs of column => value
      * @return object Row
@@ -131,7 +131,7 @@ class Phactory {
                 throw new \Exception("ManyToMany associations cannot be used in Phactory::build()");
             }
         }
-            
+
         return $blueprint->build($overrides, $associations);
     }
 
@@ -139,11 +139,11 @@ class Phactory {
      * Get a row from the database as a Row.
      * $byColumn is like array('id' => 123).
      *
-     * @param string $table_name name of the table 
+     * @param string $table_name name of the table
      * @param array $byColumn
      * @return object Row
      */
-    public function get($table_name, $byColumns) {		
+    public function get($table_name, $byColumns) {
         $all = $this->getAll($table_name, $byColumns);
         return array_shift($all);
     }
@@ -153,8 +153,8 @@ class Phactory {
             throw new \Exception("\$byColumns must be an associative array of 'column => value' pairs");
         }
 
-        $table = new Table($table_name, true, $this);
-				
+        $table = new Table($table_name, $this, true);
+
         $equals = array();
         $params = array();
 		foreach($byColumns as $field => $value)
@@ -162,7 +162,7 @@ class Phactory {
             $equals[] = $table->quoteIdentifier($field) . ' = ?';
 			$params[] = $value;
 		}
-								
+
         $where_sql = implode(' AND ', $equals);
         $sql = "SELECT * FROM " . $table->quoteIdentifier($table->getName()) . " WHERE " . $where_sql;
 
@@ -201,8 +201,8 @@ class Phactory {
     }
 
     public function manyToMany($to_table, $join_table, $from_column = null, $from_join_column = null, $to_join_column = null, $to_column = null) {
-        $to_table = new Table($to_table, true, $this);
-        $join_table = new Table($join_table, false, $this);
+        $to_table = new Table($to_table, $this, true);
+        $join_table = new Table($join_table, $this, false);
         return new Association\ManyToMany($to_table, $join_table, $from_column, $from_join_column, $to_join_column, $to_column);
     }
 
@@ -216,7 +216,7 @@ class Phactory {
      * @return object Association\ManyToOne
      */
     public function manyToOne($to_table, $from_column = null, $to_column = null) {
-        $to_table = new Table($to_table, true, $this);
+        $to_table = new Table($to_table, $this, true);
         return new Association\ManyToOne($to_table, $from_column, $to_column);
     }
 
@@ -230,7 +230,7 @@ class Phactory {
      * @return object Association\OneToOne
      */
     public function oneToOne($to_table, $from_column, $to_column = null) {
-        $to_table = new Table($to_table, true, $this);
+        $to_table = new Table($to_table, $this, true);
         return new Association\OneToOne($to_table, $from_column, $to_column);
     }
 
