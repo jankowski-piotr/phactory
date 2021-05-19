@@ -67,12 +67,13 @@ class Row {
 
                 $sql = substr($sql, 0, -4);
 
-                var_dump($sql, $params);
                 $stmt = $pdo->prepare($sql);
                 $stmt->execute($params);
                 $result = $stmt->fetch(\PDO::FETCH_ASSOC);
 
-                $this->_storage[$pk] = $result[$pk];
+                if (is_array($result)) {
+                    $this->_storage[$pk] = $result[$pk];
+                }
             }
         }
 
