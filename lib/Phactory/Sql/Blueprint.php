@@ -151,6 +151,9 @@ class Blueprint {
     protected function _evalSequence(&$data) {
         $n = $this->_sequence->next();
         foreach($data as &$value) {
+            if(empty($value)){
+                continue;
+             }
             if(false !== strpos($value, '$')) {
                 $value = strtr($value, array('$n' => $n));
             }
